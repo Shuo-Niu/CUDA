@@ -67,6 +67,13 @@ int main() {
     cudaMalloc((void**)&d_C, bytesC);
     cudaMemset(d_C, 0, bytesC); // necessary here
 
+    // *********************************************
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start, NULL);
+    // *********************************************
+
     g_begin = clock();
     // transfer data to device
     cudaMemcpy(d_A, h_A, bytesA, cudaMemcpyHostToDevice);
@@ -88,8 +95,18 @@ int main() {
     g_end = clock();
     g_time = (double)(g_end - g_begin) / CLOCKS_PER_SEC;
 
+    // *********************************************
+    cudaEventRecord(stop, NULL);
+    cudaEventSynchronize(stop);
+    float sec_time = 0.0f;
+    cudaEventElapsedTime(&sec_time, start, stop);
+    sec_time /= 1000; // ms to s
+    // *********************************************
+
     printf("CPU runtime: %lf\n", c_time);
     printf("GPU runtime: %lf\n", g_time);
+    printf("cudaEvent GPU runtime: %lf\n", sec_time);
+
     printf("Error rate: %.2f\n", compareMatrices(h_C_CPU, h_C_GPU, noCElements));
 
     // free everything
