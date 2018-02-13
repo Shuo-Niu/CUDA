@@ -1,12 +1,19 @@
-# Python-Cython-CUDA
+# Matrix Euclidean Distance
 
-A lightweigth example of doing matrix addition on GPU, invoking CUDA in Python via Cython. 
+### Build and test
+Reference to [Python-Cython-CUDA](https://github.com/Shuo-Niu/CUDA/tree/master/Python-Cython-CUDA)
 
-Check [matrixSum.cu](https://github.com/Shuo-Niu/CUDA/blob/master/matrixSum.cu) to see the pure CUDA version for the same function.
-### Build and install
-```python setup.py build_ext --inplace```
+---
 
-**Note**: setup.py is customized for running on UG(51-75) machines.
+Input matrices: A(N1 x D), B(N2 x D)
 
-### Test
-```python test.py```
+Output matrix: C(N1 x N2)
+
+**Without shared memory ([```kernel_matrix_dist(args)```](https://github.com/Shuo-Niu/CUDA/blob/master/matrixEuclideanDist/kernel/kernel.cu))**
+
+- Each thread is an element in C so the toal thread number is (N1 x N2). C[i][j] will be completely computed in the corresponding thread. Not necessary using atomic addition.
+
+**With shared memory ([```kernel_matrix_dist_sharedMem(args)```](https://github.com/Shuo-Niu/CUDA/blob/master/matrixEuclideanDist/kernel/kernel.cu))**
+
+- Each thread is an element in A so the total thread number is (N1 x D). C[i][j] will be added up separately in different threads, so atomic addition is necessary (CUDA atomic operation is only available for type float32). 
+- Elements in B will be moved to shared memory by blocking (so that B can be larger than 48KB - maximum size of shared memory). Each thread (i.e. each element in A) will compute with a block of B in shared memory one at a time iteratively, and write results to the corresponding position in C. At the end, each element in A can traverse all elements in B.
