@@ -1,7 +1,7 @@
 # Matrix Euclidean Distance
 
 ### Build and test
-Reference to [Python-Cython-CUDA](https://github.com/Shuo-Niu/CUDA/tree/master/Python-Cython-CUDA)
+Reference to [Python-Cython-CUDA](https://github.com/Shuo-Niu/CUDA/tree/master/Python-Cython-CUDA#build-and-install)
 
 ---
 
