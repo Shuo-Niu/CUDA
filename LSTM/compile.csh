@@ -1,0 +1,1 @@
+nvcc -ccbin clang-3.8 -arch=sm_52 -O3 -lcublas -lcurand -o LSTM lstm.cu

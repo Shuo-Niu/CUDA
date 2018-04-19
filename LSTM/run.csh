@@ -1,0 +1,10 @@
+./LSTM_trans 100 1 512 64;
+./LSTM_trans 100 2 512 64;
+./LSTM_trans 100 3 512 64;
+./LSTM_trans 100 4 512 64;
+./LSTM_trans 100 5 512 64;
+./LSTM_trans 100 6 512 64;
+./LSTM_trans 100 7 512 64;
+./LSTM_trans 100 8 512 64;
+./LSTM_trans 100 9 512 64;
+./LSTM_trans 100 10 512 64;
